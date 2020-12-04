@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class TricksyPagesConfig(AppConfig):
-    name = 'tricksy_pages'
+class TrixiePagesConfig(AppConfig):
+    name = 'trixie_pages'
