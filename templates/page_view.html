@@ -1,0 +1,31 @@
+{% load static %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <script src="{% static 'js/trix_or_treat.js' %}"></script>
+    {% endif %}
+
+    <div data-controller="trix_or_treat" data-reflex-root="article">
+        <nav data-target="trix_or_treat.nav" hidden>
+            <button data-reflex="TrixOrTreat#toggle_edit_mode">
+                {% if editing %}
+                    Save
+                {% else %}
+                    Edit
+                {% endif %}
+            </button>
+            <button data-reflex="TrixOrTreat#metrics">Metrics</button>
+            <button data-reflex="TrixOrTreat#new_page">New</button>
+            <button data-reflex="TrixOrTreat#copy">Copy</button>
+            <button data-reflex="TrixOrTreat#delete">Delete</button>
+        </nav>
+
+        {% if editing %}
+            {{ form }}
+        {% else %}
+            <article>
+                {{ body_content }}
+            </article>
+        {% endif %}
+    </div>
+{% endblock %}
