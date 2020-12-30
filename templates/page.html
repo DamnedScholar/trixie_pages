@@ -5,8 +5,8 @@
         <script src="{% static 'js/trixie.js' %}"></script>
     {% endif %}
 
-    <div data-controller="trixie" data-reflex-root="article">
-        <nav data-target="trixie.nav" hidden>
+    <div data-controller="trixie" data-reflex-root="aside">
+        <nav data-trixie-target="nav" hidden>
             <button data-reflex="Trixie#toggle_edit_mode">
                 {% if editing %}
                     Save
@@ -14,10 +14,10 @@
                     Edit
                 {% endif %}
             </button>
-            <button data-reflex="Trixie#metrics">Metrics</button>
-            <button data-reflex="Trixie#new_page">New</button>
-            <button data-reflex="Trixie#copy">Copy</button>
-            <button data-reflex="Trixie#delete">Delete</button>
+            <button data-reflex="Trixie#show_metrics">Metrics</button>
+            <button data-reflex="Trixie#create_page">Create Page</button>
+            <button data-reflex="Trixie#copy_page">Copy Page</button>
+            <button data-reflex="Trixie#delete_page">Delete Page</button>
         </nav>
 
         {% if editing %}
@@ -27,5 +27,9 @@
                 {{ body_content }}
             </article>
         {% endif %}
+        <aside data-trixie-target="modal"
+            class="absolute bottom-50 rounded-lg w-1/2 py-10 px-2 ring-4"
+        >
+        </aside>
     </div>
 {% endblock %}

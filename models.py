@@ -18,21 +18,25 @@ class TrixieField(fields.TextField):
 class BasePage(models.Model):
     guid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     # HashidsField requires salt if there's none in `settings.py`.
-    hashid = HashidsField(real_field_name=guid, salt="Itsy bitsy spider")
+    hashid = HashidsField(real_field_name=guid)
     title = models.CharField(max_length=500, blank=True)
     slug = models.SlugField()
-    content = TrixieField()
-    syndicate = models.BooleanField(default=False)
+    content = TrixieField(blank=True)
     template = models.CharField(max_length=50, blank=True)
-    editing = models.UUIDField(blank=True, default=None)
+    editing = models.ForeignKey(User, related_name="page_edit_lock",
+        null=True, on_delete=models.SET_NULL)
+    edit_lock = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    creator = models.ForeignKey(User, related_name="page_creator"
+    creator = models.ForeignKey(User, related_name="page_creator",
         null=True, on_delete=models.SET_NULL)
     creator_username = models.CharField(max_length=50, null=True)
-    owner = models.ForeignKey(User, related_name="page_owner"
+    owner = models.ForeignKey(User, related_name="page_owner",
         null=True, on_delete=models.SET_NULL)
     owner_username = models.CharField(max_length=50, null=True)
     # TODO: I need to implement tagging and metadata somehow.
     # tags = TagField(blank=True)
     # meta = models.OneToOneField(MetaTags, null=True, on_delete=models.SET_NULL)
+
+class Page(BasePage):
+    pass
