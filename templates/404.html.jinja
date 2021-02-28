@@ -1,0 +1,15 @@
+{% extends 'content.html.jinja' %}
+
+{% block content %}
+<h2 class="font-serif text-2xl italic">
+    Very sorry,
+</h2>
+<p class="text-xl font-serif m-auto">
+    But it looks like we can't find the page you're looking for.
+</p>
+{% if request.user.is_authenticated() %}
+    <p class="text-xl font-serif m-auto">
+        You look pretty special, though. Would you perhaps like to <a href="{{ url('trixie-create') }}">create</a> one?
+    </p>
+{% endif %}
+{% endblock %}

@@ -1,9 +1,12 @@
-from django.conf.urls import url
-from .controllers import page
+from django.urls import path
+
+from .views import PageView, CreatePageView, UpdatePageView
 
 urlpatterns = [
-    url(r'^<slug:page_slug>/$', page.display, name="trixie-page"),
-    url(r'^new/<slug:page_slug>/$', page.create, name="trixie-create"),
-    url(r'^edit/<slug:page_slug>/$', page.edit, name="trixie-edit"),
-    url(r'^delete/<slug:page_slug>/$', page.delete, name="trixie-delete"),
+    path(r'', PageView.as_view(), { 'slug': 'ruthies' }, name="home"),
+    path(r'<slug:slug>', PageView.as_view(), name="trixie-page"),
+    path(r'new/<slug:slug>', CreatePageView.as_view(), name="trixie-create"),
+    path(r'edit/<slug:slug>', UpdatePageView.as_view(), name="trixie-edit"),
+    # TODO: Consider possible delete endpoint.
+    # url(r'^/delete/<slug:slug>', DeletePageView.as_view(), name="trixie-delete"),
 ]

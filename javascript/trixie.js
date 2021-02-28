@@ -3,6 +3,8 @@ import StimulusReflex from 'stimulus_reflex'
 import WebsocketConsumer from 'sockpuppet-js'
 import TrixieController from './controllers/trixie_controller'
 
+import '../static/trix?original'
+
 const application = Application.start()
 const consumer = new WebsocketConsumer('ws://localhost:8000/ws/sockpuppet-sync')
 

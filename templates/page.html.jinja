@@ -1,0 +1,80 @@
+{% extends 'content.html.jinja' %}
+
+{% set editing = is_edited_by(request.user._wrapped) %}
+
+{% set page = namespace()%}
+{% set page.slug = object.slug %}
+{% if editing %}
+    {% set page.content %}
+        <form>
+            <edit-head>
+                {{ form.title }}
+                {{ form.slug }}
+            </edit-head>
+            {{ form.content }}
+        </form>
+    {% endset %}
+{% else %}
+    {% set page.content %}
+        <article>
+            {{ object.content | safe }}
+        </article>
+    {% endset %}
+{% endif %}
+
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <script src="{{ static('js/trixie.js') }}"></script>
+
+        <form data-controller="trixie"
+            data-slug="{{ page.slug }}"
+        >
+            <nav data-trixie-target="nav">
+                {% if editing %}
+                    <button type="button"
+                        data-action="trixie#view_mode"
+                        data-trixie-target="toggle">
+                        View
+                    </button>
+                {% else %}
+                    <button type="button"
+                        data-action="trixie#edit_mode"
+                        data-trixie-target="toggle">
+                        Edit
+                    </button>
+                {% endif %}
+                <button type="button"
+                    data-action="trixie#show_metrics"
+                        data-trixie-target="metrics">
+                    Metrics
+                </button>
+                <button type="button"
+                    data-action="trixie#create_page"
+                        data-trixie-target="create">
+                    Create Page
+                </button>
+                <button type="button"
+                    data-action="trixie#copy_page"
+                        data-trixie-target="copy">
+                    Copy Page
+                </button>
+                <button type="button"
+                    data-action="trixie#delete_page"
+                        data-trixie-target="delete">
+                    Delete Page
+                </button>
+            </nav>
+            
+            {{ page.content }}
+            
+            <aside data-trixie-target="modal" hidden
+                class="absolute bottom-50 rounded-lg w-1/2 py-10 px-2 ring-4"
+            >
+                {{ trixie.modal if trixie is defined else '' }}
+            </aside>
+        </form>
+    {% else %}
+        {{ page.content }}
+    {% endif %}
+{% endblock %}
