@@ -1,18 +1,18 @@
 {% extends 'content.html.jinja' %}
 
-{% set editing = is_edited_by(request.user._wrapped) %}
+{# {% set user = resolve_user() %} #}
 
-{% set page = namespace()%}
+{% set editing = is_edited_by(request.user) %}
+
+{% set page = namespace() %}
 {% set page.slug = object.slug %}
 {% if editing %}
     {% set page.content %}
-        <form>
-            <edit-head>
-                {{ form.title }}
-                {{ form.slug }}
-            </edit-head>
-            {{ form.content }}
-        </form>
+        <edit-head>
+            {{ form.title }}
+            {{ form.slug }}
+        </edit-head>
+        {{ form.content }}
     {% endset %}
 {% else %}
     {% set page.content %}
@@ -24,6 +24,9 @@
 
 
 {% block content %}
+    Logged in as {{ request.user.email }}
+
+
     {% if request.user.is_authenticated %}
         <script src="{{ static('js/trixie.js') }}"></script>
 
@@ -33,34 +36,34 @@
             <nav data-trixie-target="nav">
                 {% if editing %}
                     <button type="button"
-                        data-action="trixie#view_mode"
+                        data-action="trixie#viewMode"
                         data-trixie-target="toggle">
                         View
                     </button>
                 {% else %}
                     <button type="button"
-                        data-action="trixie#edit_mode"
+                        data-action="trixie#editMode"
                         data-trixie-target="toggle">
                         Edit
                     </button>
                 {% endif %}
                 <button type="button"
-                    data-action="trixie#show_metrics"
+                    data-action="trixie#showMetrics"
                         data-trixie-target="metrics">
                     Metrics
                 </button>
                 <button type="button"
-                    data-action="trixie#create_page"
+                    data-action="trixie#createPage"
                         data-trixie-target="create">
                     Create Page
                 </button>
                 <button type="button"
-                    data-action="trixie#copy_page"
+                    data-action="trixie#copyPage"
                         data-trixie-target="copy">
                     Copy Page
                 </button>
                 <button type="button"
-                    data-action="trixie#delete_page"
+                    data-action="trixie#deletePage"
                         data-trixie-target="delete">
                     Delete Page
                 </button>

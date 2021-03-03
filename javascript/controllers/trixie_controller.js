@@ -1,7 +1,8 @@
 import { Controller } from 'stimulus';
 import StimulusReflex from 'stimulus_reflex';
 
-import Dialog from 'blackstone-ui/presenters/dialog'
+import Prompt from 'blackstone-ui/presenters/dialog/prompt'
+import { html } from 'lit-html'
 
 export default class extends Controller {
   static targets = ['nav', 'toggle', 'metrics', 'create', 'copy', 'delete']
@@ -14,6 +15,9 @@ export default class extends Controller {
     StimulusReflex.register(this)
 
     this.hasNavTarget ? this.navTarget.removeAttribute('hidden') : false
+  }
+
+  disconnect() {
   }
 
   // Lifecycle methods
@@ -31,28 +35,33 @@ export default class extends Controller {
 
   // Reflex API
 
-  edit_mode(e) {
+  editMode(e) {
     this.stimulate('TrixieReflex#edit_mode')
   }
 
-  view_mode(e) {
+  viewMode(e) {
     this.stimulate('TrixieReflex#view_mode')
   }
 
-  async create_page(e) {
-    let dialog = await Dialog.prompt().modal({
-      'msg': 'Please enter a slug for the new page. This cannot be a slug currently being used.',
-      'required': true,
+  beforeCreatePageReflex(anchor, reflex) {
+    // Generate a dialog to receive input. The property will be a Promise until it resolves, and resolution will be based on data back from the server.
+    document.addEventListener("slug-prompt", e => {
+      this.dialog = new Prompt({
+        getHTML: () => html`${e.detail}`,
+        btns: ['submit', 'cancel']
+      })
     })
-
-    this.stimulate('TrixieReflex#create_page', dialog.el)
   }
 
-  create_confirm() {
+  createPage() {
+    this.stimulate('TrixieReflex#create_page')
+  }
+
+  createConfirm() {
     this.stimulate('TrixieReflex#create_confirm')
   }
 
-  show_metrics(e) {
+  showMetrics(e) {
     this.stimulate('TrixieReflex#show_metrics')
   }
 

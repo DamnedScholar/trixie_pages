@@ -8,14 +8,7 @@ from ..models import Page
 from ..forms import PageEditForm, SlugForm
 
 
-class CRMixin(Reflex):
-    # TODO: Prototype convenience functions for interfacing with CableReady operations and making declarative broadcasts. The default behavior takes all Reflex instance variables, plugs them into the context, and rerenders the view function based on the changed state, which doesn't accommodate for rendering arbitrary templates for components like modals.
-
-    def open_channel(self):
-        # Return a Channel object on which we can perform CR operations.
-        return Channel(self.get_channel_id())
-
-class TrixieReflex(Reflex, CRMixin):
+class TrixieReflex(Reflex):
     trixie = {
         'modal': '',    # HTML string rendered inside the page for dialogs
     }
@@ -50,22 +43,33 @@ class TrixieReflex(Reflex, CRMixin):
         template = Jinja2.get_template('widgets/slugform.html.jinja')
 
         output = template.render({
-            'message': 'Please type a slug for the new page that hasn\'t been used yet.',
+            'label': 'Please type a slug for the new page that hasn\'t been used yet.',
             'form': SlugForm(),
             'reflex': self.__name__ + '#create_confirm'
         }, self.request)
 
-        channel.inner_html({
-            'selector': '#reflex_modal',
-            'focus-selector': 'input',
-            'html': output
+        # channel.inner_html({
+        #     'selector': '#reflex_modal',
+        #     'focus-selector': 'input',
+        #     'html': output
+        # })
+
+        # payload = {
+        #     'label': 'Please type a slug for the new page',
+        #     'helpText': 'Slug must not be used yet.',
+        # }
+
+        channel.dispatch_event({
+            'name': 'slug-prompt',
+            'detail': output,
+            'selector': 'document',
         })
 
         channel.broadcast()
 
     def create_confirm(self):
         # Check that the chosen slug is valid and unclaimed.
-
+        pass
 
     def copy_page(self):
         pass
@@ -83,3 +87,9 @@ class TrixieReflex(Reflex, CRMixin):
 
     def retain_view_event(self):
         pass
+
+    # TODO: Prototype convenience functions for interfacing with CableReady operations and making declarative broadcasts. The default behavior takes all Reflex instance variables, plugs them into the context, and rerenders the view function based on the changed state, which doesn't accommodate for rendering arbitrary templates for components like modals.
+
+    def open_channel(self):
+        # Return a Channel object on which we can perform CR operations.
+        return Channel(self.get_channel_id())

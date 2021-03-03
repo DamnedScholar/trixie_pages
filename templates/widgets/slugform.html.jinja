@@ -1,14 +1,15 @@
 <form data-controller="hotkeys"
     class="w-full bg-glass-100 flex flex-col justify-between items-center"
+    slot="body"
 >
     <slug-description class="inline-block text-lg font-serif">
-        {{ message }}
+        {{ label }}
     </slug-description>
     <slug-input class="inline-block text-lg font-mono">
         {{ form.slug }}
     </slug-input>
     <slug-advisory class="inline-block text-md font-serif">
         {{ form.slug.error | default(
-            "Press <kbd>enter</kbd> to submit.", true) }}
+            "Press <kbd class='p-2 rounded-md border-glass-300 font-mono'>enter</kbd> to submit.", true) }}
     </slug-advisory>
 </form>
