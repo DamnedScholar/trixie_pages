@@ -3,6 +3,7 @@ from jinja2 import contextfunction
 
 from .forms import PageEditForm
 
+
 @contextfunction
 @library.global_function
 def is_edited_by(context, user):
